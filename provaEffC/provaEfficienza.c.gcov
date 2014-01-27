@@ -1,0 +1,44 @@
+        -:    0:Source:provaEfficienza.c
+        -:    0:Graph:provaEfficienza.gcno
+        -:    0:Data:provaEfficienza.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:
+        -:    4:
+        1:    5:void SetIntValue(int *a, int l, int v)
+        -:    6:{
+        -:    7: int i;
+        1:    8: for ( i = 0; i < l; i++ ) a[i] = v;
+        1:    9:  return;
+        -:   10:}
+        -:   11:
+        1:   12:int main(int argc, char const *argv[])
+        -:   13:{
+        1:   14:	int height = 600, width = 800;
+        1:   15:	int radius = 6;
+        -:   16:	int i,j,k,z;
+        -:   17:
+        1:   18:	int *matrix = (int*)malloc(sizeof(int)*height*width);
+        -:   19:
+        1:   20:	SetIntValue(matrix, height*width, 1);
+        -:   21:
+      589:   22:	for (i = radius; i < height-radius; ++i)
+        -:   23:	{
+   463932:   24:		for (j = radius; j < width-radius; ++j)
+        -:   25:		{
+  6486816:   26:			for (k = -radius; k <= radius; ++k)
+        -:   27:			{
+ 84328608:   28:				for (z = -radius; z <= radius; ++z)
+        -:   29:				{
+        -:   30:					//printf("i=%d;j=%d;k=%d;z=%d;idx1=%d;idx2=%d\n",i,j,k,z,i+j*height,(i+k)+(j+z)*radius);
+ 78305136:   31:					matrix[i+j*height] += matrix[(i+k)+(j+z)*radius];
+        -:   32:				}
+        -:   33:			}
+        -:   34:		}
+        -:   35:	}
+        -:   36:
+        -:   37:
+        1:   38:	return 0;
+        -:   39:}
