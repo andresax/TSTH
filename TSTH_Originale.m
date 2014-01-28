@@ -1,17 +1,17 @@
-foldersList2 = {'badminton/alignedBadminton/', 'boulevard/alignedBoulevard/', 'sidewalk/alignedSidewalk/', 'traffic/alignedTraffic/'};
+foldersList2 = {'badminton/aligned/', 'boulevard/aligned/', 'sidewalk/aligned/', 'traffic/aligned/'};
 foldersList = {'badminton', 'boulevard', 'sidewalk', 'traffic'};
 nInitFrameList = [800, 790, 800, 900];
 nEndFrameList = [1150, 2500, 1200, 1570];
 %%
-matlabpool(4)
+%matlabpool(4)
 %%
 smoothEnabled = false;
 binRatio = 16;
 radiusRegion = 6;
 imgExtension = 'jpg';
-thresholdBhat=.75;
+thresholdBhat=.758;
 windowSize = 690;
-withIllumCorrection =false;
+withIllumCorrection =true;
 threshOffsetIll = 1.0;
 
 if smoothEnabled
@@ -40,7 +40,7 @@ for curvid = 1:4
         counter = 1;
     end
     %% Learning Stage
-    k = [5,5];h = fspecial('gaussian', k, .5);%MotionBlur = imfilter(I,h);
+    %k = [5,5];h = fspecial('gaussian', k, .5);%MotionBlur = imfilter(I,h);
     [XM,YM] = meshgrid(1:size(grayHistogram,2),1:size(grayHistogram,1));
     XM = uint32(XM);YM = uint32(YM);
     for curFrame = 1:1:nLearningFrame-100
@@ -48,7 +48,8 @@ for curvid = 1:4
         curNumber = getFrameNumber( baseNumbering,curFrame );
         
         curImgGray = rgb2gray(imread([imgBaseName, curNumber, '.' ,imgExtension]));
-        
+        %curImgGray = imread([imgBaseName, curNumber, '.' ,imgExtension]);
+
         idxRGB = floor((curImgGray+binRatio-1)/binRatio);
         %iG =sub2ind(size(grayHistogram),YM(:),XM(:),uint32(idxRGB(:)));
         iG = 1 + (YM(:)-1)*1 + (XM(:)-1)*size(grayHistogram,1) ...
@@ -80,7 +81,8 @@ for curvid = 1:4
         maxValHistR = mean(grayHistogram,3);
         curNumber = getFrameNumber( baseNumbering,curFrame );
         
-        curImgGray = rgb2gray(imread([imgBaseName, curNumber, '.' ,imgExtension]));
+ %       curImgGray = (imread([imgBaseName, curNumber, '.' ,imgExtension]));
+         curImgGray = rgb2gray(imread([imgBaseName, curNumber, '.' ,imgExtension]));
         tic
         if withIllumCorrection
             comparMediane = median(lastMedians);
